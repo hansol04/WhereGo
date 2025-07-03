@@ -162,29 +162,6 @@ function CommentSection({ postId }) {
 
               return (
                 <li key={comment.commentId} className="comment-item">
-                  {isEditing ? (
-                    <>
-                      <textarea
-                        value={editContents[comment.commentId] || ''}
-                        onChange={(e) =>
-                          setEditContents(prev => ({
-                            ...prev,
-                            [comment.commentId]: e.target.value,
-                          }))
-                        }
-                      />
-                      <div className="comment-actions">
-                        <button onClick={() => handleEditSubmit(comment.commentId)}>저장</button>
-                        <button onClick={() =>
-                          setEditingStates(prev => ({
-                            ...prev,
-                            [comment.commentId]: false,
-                          }))
-                        }>취소</button>
-                      </div>
-                    </>
-                  ) : (
-                    <>
                       <div className="comment-header">
                         <div className="comment-header-top">
                         {typeof comment.profileImage === 'string' && comment.profileImage.trim() !== '' ? (
@@ -210,11 +187,33 @@ function CommentSection({ postId }) {
                             </div>
                           )}
                         </div>
-
-                        <div className="comment-time-under">
-                          {getFormattedTime(comment.createdAt)}
-                        </div>
+                        <div className="comment-time-under">{getFormattedTime(comment.createdAt)}</div>
                       </div>
+
+  {isEditing ? (
+    <div className="comment-edit-inline">
+      <textarea
+        className="edit-textarea"
+        value={editContents[comment.commentId]}
+        onChange={(e) =>
+          setEditContents(prev => ({
+            ...prev,
+            [comment.commentId]: e.target.value,
+          }))
+        }
+      />
+      <div className="edit-actions-inline">
+        <button className="save-btn" onClick={() => handleEditSubmit(comment.commentId)}>저장</button>
+        <button className="cancel-btn" onClick={() =>
+          setEditingStates(prev => ({
+            ...prev,
+            [comment.commentId]: false,
+          }))
+        }>취소</button>
+      </div>
+    </div>
+  ) : (
+    <>
 
                       <div className="comment-content">{comment.content}</div>
                       <div className="comment-relative-time">{getRelativeTime(comment.createdAt)}</div>
